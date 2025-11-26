@@ -3,3 +3,4 @@ numpy>=1.20.0
 flake8
 autopep8
 colorama
+tabulate

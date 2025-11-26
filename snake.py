@@ -64,7 +64,7 @@ class Snake:
         - None
         """
         size = self.args.size
-        windows_size = 1500
+        windows_size = 800
         self.game = Game(size, size)
         self.gui = GameGUI(self.game, windows_size)
         self.agent = QLearning(self.game)

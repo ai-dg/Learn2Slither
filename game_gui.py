@@ -128,6 +128,10 @@ class GameGUI:
         self.clock = None
         self.event = None
         self.continue_game = False
+        self.main_size = 0
+        self.title_size = 0
+        self.small_size = 0
+        self.button_size = 0
 
     def __init__(self, game: Game, windows_size: int):
         """
@@ -167,8 +171,6 @@ class GameGUI:
             self.background_image, (self.windows_size, self.windows_size))
         self.background.blit(self.background_image, (0, 0))
 
-        self.font = pygame.font.Font('./fonts/JetbrainsMonoBold-51Xez.ttf', 36)
-
         self.borders = self.windows_size * 0.05
         self.background_snake_size_1 = self.windows_size - \
             self.borders * 2 - (self.windows_size * 0.25)
@@ -201,6 +203,13 @@ class GameGUI:
         Return:
         - None
         """
+        self.main_size = max(12, int(self.windows_size * 0.025))
+        self.title_size = max(12, int(self.windows_size * 0.02))
+        self.small_size = max(10, int(self.windows_size * 0.0133))
+        self.button_size = max(10, int(self.windows_size * 0.014))
+
+        self.font = pygame.font.Font(
+            './fonts/JetbrainsMonoBold-51Xez.ttf', self.main_size)
         self.text = self.font.render(
             "Welcome to the AI Snake Game with Q-Learning", True, self.BLACK)
         self.text_pos = self.text.get_rect()
@@ -208,22 +217,20 @@ class GameGUI:
         self.text_pos.centery = self.borders * 0.5
 
         self.font_title = pygame.font.Font(
-            './fonts/JetbrainsMonoBold-51Xez.ttf', 35)
+            './fonts/JetbrainsMonoBold-51Xez.ttf', self.title_size)
         self.font_instructions = pygame.font.Font(
-            './fonts/JetbrainsMonoRegular-RpvmM.ttf', 20)
+            './fonts/JetbrainsMonoRegular-RpvmM.ttf', self.small_size)
         self.font_stats = pygame.font.Font(
-            './fonts/JetbrainsMonoRegular-RpvmM.ttf', 20)
+            './fonts/JetbrainsMonoRegular-RpvmM.ttf', self.small_size)
         self.font_vision = pygame.font.Font(
-            './fonts/JetbrainsMonoBoldItalic-6YyW6.ttf', 20)
+            './fonts/JetbrainsMonoBoldItalic-6YyW6.ttf', self.small_size)
         self.font_key = pygame.font.Font(
-            './fonts/JetbrainsMonoRegular-RpvmM.ttf', 20)
+            './fonts/JetbrainsMonoRegular-RpvmM.ttf', self.small_size)
         self.font_button = pygame.font.Font(
-            './fonts/JetbrainsMonoBold-51Xez.ttf', 20)
+            './fonts/JetbrainsMonoBold-51Xez.ttf', self.button_size)
 
-        self.title_left = self.font_title.render(
-            "INSTRUCTIONS", True, self.BLACK)
-        self.title_right = self.font_title.render(
-            "STATS AGENT", True, self.BLACK)
+        self.title_left = self.font_title.render("INSTRUCTIONS", True, self.BLACK)
+        self.title_right = self.font_title.render("STATS AGENT", True, self.BLACK)
 
     # -----------------------------------------------------------------------
     # Sprite Preparation
@@ -505,7 +512,7 @@ class GameGUI:
         beige_color = self.BEIGE
         self.background_instructions.fill(beige_color)
 
-        border_thickness = 8
+        border_thickness = 5
         pygame.draw.rect(self.background_instructions, self.BLACK,
                          (0, 0, self.side_2, self.side_1), border_thickness)
 
@@ -565,21 +572,23 @@ class GameGUI:
         Return:
         - None
         """
+        height_position = max(14, int(self.windows_size * 0.025))
         separator_x = int(self.side_2 * 0.30)
         pygame.draw.line(self.background_instructions, self.BLACK,
                          (separator_x, 20), (separator_x, self.side_1 - 20), 2)
 
         left_title_x = (separator_x - self.title_left.get_width()) // 2
-        self.background_instructions.blit(self.title_left, (left_title_x, 25))
+        self.background_instructions.blit(
+            self.title_left, (left_title_x, height_position))
 
         right_title_x = separator_x + \
             (self.side_2 - separator_x - self.title_right.get_width()) // 2
         self.background_instructions.blit(
-            self.title_right, (right_title_x, 25))
+            self.title_right, (right_title_x, height_position))
 
-        start_X = 30
-        start_y = 80
-        line_spacing = 40
+        start_X = max(10, int(self.side_2 * 0.03)) 
+        start_y = max(10, int(self.side_1 * 0.12)) + (height_position * 1.50)
+        line_spacing = max(12, int(self.side_1 * 0.12))
 
         buttons = {
             "Next step": "RIGHT arrow key",
@@ -597,11 +606,12 @@ class GameGUI:
             self.BLUE,
             self.font_key,
             self.font_instructions)
-
-        start_x = separator_x + 20
-        start_y = 80
-        line_spacing = 32
-        right_col_width = self.side_2 - separator_x - 150
+        
+        start_x = separator_x + max(8, int(self.side_2 * 0.02))
+        stats_start_y = start_y
+        line_spacing_stats = max(12, int(self.side_1 * 0.1))
+        right_col_padding = max(50, int(self.side_2 * 0.12))
+        right_col_width = self.side_2 - separator_x - right_col_padding
         col_width = right_col_width // 3
 
         stats_col1 = {
@@ -616,8 +626,8 @@ class GameGUI:
         self.ft_draw_boutons_in_background_instructions(
             stats_col1,
             start_x,
-            start_y,
-            line_spacing,
+            stats_start_y,
+            line_spacing_stats,
             self.BLACK,
             self.RED,
             self.font_key,
@@ -635,8 +645,8 @@ class GameGUI:
         self.ft_draw_boutons_in_background_instructions(
             stats_col2,
             start_x,
-            start_y,
-            line_spacing,
+            stats_start_y,
+            line_spacing_stats,
             self.BLACK,
             self.RED,
             self.font_key,
@@ -651,25 +661,26 @@ class GameGUI:
         self.ft_draw_boutons_in_background_instructions(
             stats_col3,
             start_x,
-            start_y,
-            line_spacing,
+            stats_start_y,
+            line_spacing_stats,
             self.BLACK,
             self.RED,
             self.font_key,
             self.font_button)
 
-        start_y = start_y + len(stats_col3) * line_spacing + 10
+        visions_start_y = stats_start_y + len(stats_col3) * line_spacing_stats + max(5, int(self.side_1 * 0.02))
         visions = {
             "Up": f"{self.gui_data['vision'][0]}",
             "Down": f"{self.gui_data['vision'][1]}",
             "Left": f"{self.gui_data['vision'][2]}",
             "Right": f"{self.gui_data['vision'][3]}"
         }
+        visions_line_spacing = max(15, int(self.side_1 * 0.05))
         self.ft_draw_boutons_in_background_instructions(
             visions,
             start_x,
-            start_y,
-            28,
+            visions_start_y,
+            visions_line_spacing,
             self.BLACK,
             self.BLUE,
             self.font_key,
@@ -840,7 +851,7 @@ class GameGUI:
 def main():
     try:
         size = 10
-        windows_size = 1500
+        windows_size = 1400
         game = Game(size, size)
         game_gui = GameGUI(game, windows_size)
         game_gui.ft_initialize_game()
