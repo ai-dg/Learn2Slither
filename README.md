@@ -30,15 +30,15 @@ It serves as an introduction to **reinforcement learning fundamentals**, written
 
 ---
 
-## ▌Fonctionnalités Bonus
+## ▌Bonus Features
 
-- ■ **Interface Graphique Améliorée** : Système de lobby, panneau de configuration, suivi des statistiques
-- ■ **Tailles de Plateau Variables** : Support pour différentes dimensions (10×10, 15×15, 20×20, jusqu'à 40×40)
-- ■ **Haute Performance** : Longueur maximale atteinte de **71 cellules** après 4500 sessions
-- ■ **Paramètres Avancés** : Contrôle de la vitesse (FPS), mode pas-à-pas, tracé des courbes d'apprentissage
-- ■ **Statistiques Détaillées** : Affichage périodique des performances avec bonus atteints
+- ■ **Enhanced GUI**: Lobby system, configuration panel, statistics tracking
+- ■ **Variable Board Sizes**: Support for different dimensions (10×10, 15×15, 20×20, up to 40×40)
+- ■ **High Performance**: Maximum length achieved of **71 cells** after 4500 sessions
+- ■ **Advanced Parameters**: Speed control (FPS), step-by-step mode, learning curve plotting
+- ■ **Detailed Statistics**: Periodic performance display with achieved bonuses
 
-> ⚠️ Ces fonctionnalités ne sont évaluées que si le programme de base fonctionne parfaitement.
+> ⚠️ These features are only evaluated if the core program works flawlessly.
 
 ---
 
@@ -88,7 +88,7 @@ Game Over: -100
 - `numpy` (numerical operations)
 - `pickle` (model serialization)
 - `tabulate` (table formatting)
-- `matplotlib` (plotting, optionnel)
+- `matplotlib` (plotting, optional)
 
 ### ■ Installation
 
@@ -107,124 +107,124 @@ pip install -r requirements.txt
 
 ---
 
-## ▌Instructions d'Utilisation
+## ▌Usage Instructions
 
-### ■ Syntaxe de Base
+### ■ Basic Syntax
 
 ```bash
 python3 snake.py [OPTIONS]
 ```
 
-ou directement :
+or directly:
 
 ```bash
 ./snake [OPTIONS]
 ```
 
-### ■ Options Disponibles
+### ■ Available Options
 
-#### Options Principales
+#### Main Options
 
-| Option | Type | Défaut | Description |
-|--------|------|--------|-------------|
-| `-sessions N` | entier | 10 | Nombre de sessions d'entraînement |
-| `-visual [on\|off]` | choix | off | Active/désactive l'affichage graphique (Pygame) |
-| `-terminal [on\|off]` | choix | on | Active/désactive l'affichage terminal du jeu |
-| `-save PATH` | chaîne | - | Chemin pour sauvegarder le modèle entraîné (.pkl) |
-| `-load PATH` | chaîne | - | Chemin pour charger un modèle pré-entraîné (.pkl) |
-| `-dontlearn` | flag | False | Désactive l'apprentissage (mode évaluation uniquement) |
-| `-step-by-step` | flag | False | Active le mode pas-à-pas (pause à chaque mouvement) |
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `-sessions N` | integer | 10 | Number of training sessions |
+| `-visual [on\|off]` | choice | off | Enable/disable graphical display (Pygame) |
+| `-terminal [on\|off]` | choice | on | Enable/disable terminal game display |
+| `-save PATH` | string | - | Path to save the trained model (.pkl) |
+| `-load PATH` | string | - | Path to load a pre-trained model (.pkl) |
+| `-dontlearn` | flag | False | Disable learning (evaluation mode only) |
+| `-step-by-step` | flag | False | Enable step-by-step mode (pause at each move) |
 
-#### Options Bonus
+#### Bonus Options
 
-| Option | Type | Défaut | Description |
-|--------|------|--------|-------------|
-| `-speed N` | entier | 50 | Vitesse du jeu en FPS (frames per second) |
-| `-size N` | entier | 10 | Taille du plateau (N×N cellules, max 40) |
-| `-stats` | flag | False | Affiche les statistiques toutes les 50 sessions |
-| `-plot` | flag | False | Trace les courbes d'apprentissage (longueur max vs sessions) |
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `-speed N` | integer | 50 | Game speed in FPS (frames per second) |
+| `-size N` | integer | 10 | Board size (N×N cells, max 40) |
+| `-stats` | flag | False | Display statistics every 50 sessions |
+| `-plot` | flag | False | Plot learning curves (max length vs sessions) |
 
-### ■ Exemples d'Utilisation
+### ■ Usage Examples
 
-#### 1. Entraîner un modèle (sans affichage)
+#### 1. Train a model (without display)
 
 ```bash
-# Entraînement basique avec 100 sessions
+# Basic training with 100 sessions
 python3 snake.py -sessions 100 -visual off -save models/my_model.pkl
 
-# Entraînement avec statistiques
+# Training with statistics
 python3 snake.py -sessions 1000 -visual off -save models/1000sess.pkl -stats
 ```
 
-#### 2. Entraîner avec affichage graphique
+#### 2. Train with graphical display
 
 ```bash
-# Entraînement avec visualisation
+# Training with visualization
 python3 snake.py -sessions 50 -visual on -speed 10
 
-# Entraînement avec visualisation et mode pas-à-pas
+# Training with visualization and step-by-step mode
 python3 snake.py -sessions 10 -visual on -step-by-step -speed 5
 ```
 
-#### 3. Évaluer un modèle pré-entraîné
+#### 3. Evaluate a pre-trained model
 
 ```bash
-# Charger et évaluer sans apprentissage
+# Load and evaluate without learning
 python3 snake.py -load models/1000sess.pkl -sessions 10 -dontlearn
 
-# Évaluation avec visualisation
+# Evaluation with visualization
 python3 snake.py -load models/1000sess.pkl -sessions 5 -visual on -dontlearn -speed 10
 ```
 
-#### 4. Entraîner avec différentes tailles de plateau
+#### 4. Train with different board sizes
 
 ```bash
-# Plateau 15×15
+# 15×15 board
 python3 snake.py -sessions 100 -size 15 -visual off -save models/15x15_100sess.pkl
 
-# Plateau 20×20
+# 20×20 board
 python3 snake.py -sessions 200 -size 20 -visual off -save models/20x20_200sess.pkl
 ```
 
-#### 5. Visualiser les courbes d'apprentissage
+#### 5. Visualize learning curves
 
 ```bash
-# Entraînement avec tracé des statistiques
+# Training with statistics plotting
 python3 snake.py -sessions 500 -visual off -plot -stats -save models/500sess.pkl
 ```
 
-#### 6. Mode terminal uniquement (sans GUI)
+#### 6. Terminal mode only (without GUI)
 
 ```bash
-# Affichage terminal uniquement
+# Terminal display only
 python3 snake.py -sessions 50 -visual off -terminal on
 
-# Sans affichage du tout (entraînement rapide)
+# No display at all (fast training)
 python3 snake.py -sessions 1000 -visual off -terminal off
 ```
 
-### ■ Règles du Jeu
+### ■ Game Rules
 
-- **Taille du plateau** : 10×10 cellules par défaut (configurable)
-- **Pommes vertes** : 2 pommes vertes apparaissent aléatoirement
-- **Pomme rouge** : 1 pomme rouge apparaît aléatoirement
-- **Longueur initiale** : Le serpent commence avec une longueur de 3 cellules
-- **Conditions de fin** :
-  - Collision avec un mur → Game Over
-  - Collision avec sa propre queue → Game Over
-  - Longueur du serpent atteint 0 → Game Over
-- **Mécaniques** :
-  - Manger une pomme verte : longueur +1, nouvelle pomme verte apparaît
-  - Manger une pomme rouge : longueur -1, nouvelle pomme rouge apparaît
-
----
-
+- **Board size**: 10×10 cells by default (configurable)
+- **Green apples**: 2 green apples appear randomly
+- **Red apple**: 1 red apple appears randomly
+- **Initial length**: The snake starts with a length of 3 cells
+- **End conditions**:
+  - Collision with a wall → Game Over
+  - Collision with own tail → Game Over
+  - Snake length reaches 0 → Game Over
+- **Mechanics**:
+  - Eating a green apple: length +1, new green apple appears
+  - Eating a red apple: length -1, new red apple appears
 
 ---
 
-## ▌Exemple de Sortie
 
-### Entraînement
+---
+
+## ▌Example Output
+
+### Training
 
 ```bash
 $ python3 snake.py -sessions 100 -visual off -save models/test.pkl -stats
@@ -256,7 +256,7 @@ SESSION 100 - STATISTICS:
 Model saved to ./models/test.pkl
 ```
 
-### Évaluation
+### Evaluation
 
 ```bash
 $ python3 snake.py -load models/1000sess.pkl -sessions 5 -dontlearn -visual on
@@ -275,43 +275,43 @@ Average performance: Length 7, Steps 1
 
 ---
 
-## ▌Structure du Projet
+## ▌Project Structure
 
 ```
 Learn2Slither/
-├── snake.py              # Script principal (point d'entrée)
-├── agent.py              # Implémentation de l'agent Q-learning
-├── game_data.py          # Gestion du plateau de jeu et logique
-├── game_gui.py           # Interface graphique Pygame
-├── requirements.txt      # Dépendances Python
-├── models/               # Modèles IA pré-entraînés
-│   ├── 1sess.pkl        # Modèle entraîné avec 1 session
-│   ├── 10sess.pkl       # Modèle entraîné avec 10 sessions
-│   ├── 100sess.pkl      # Modèle entraîné avec 100 sessions
-│   ├── 1000sess.pkl     # Modèle entraîné avec 1000 sessions
-│   ├── 1500sess.pkl     # Modèle entraîné avec 1500 sessions
-│   ├── 2000sess.pkl     # Modèle entraîné avec 2000 sessions
-│   ├── 2500sess.pkl     # Modèle entraîné avec 2500 sessions
-│   ├── 3000sess.pkl     # Modèle entraîné avec 3000 sessions
-│   ├── 3500sess.pkl     # Modèle entraîné avec 3500 sessions
-│   ├── 4000sess.pkl     # Modèle entraîné avec 4000 sessions
-│   ├── 4500sess.pkl     # Modèle entraîné avec 4500 sessions
-│   └── 5000sess.pkl     # Modèle entraîné avec 5000 sessions
-├── assets/               # Ressources graphiques (sprites)
-├── fonts/                # Polices de caractères
-└── README.md            # Ce fichier
+├── snake.py              # Main script (entry point)
+├── agent.py              # Q-learning agent implementation
+├── game_data.py          # Game board and logic management
+├── game_gui.py           # Pygame graphical interface
+├── requirements.txt      # Python dependencies
+├── models/               # Pre-trained AI models
+│   ├── 1sess.pkl        # Model trained with 1 session
+│   ├── 10sess.pkl       # Model trained with 10 sessions
+│   ├── 100sess.pkl      # Model trained with 100 sessions
+│   ├── 1000sess.pkl     # Model trained with 1000 sessions
+│   ├── 1500sess.pkl     # Model trained with 1500 sessions
+│   ├── 2000sess.pkl     # Model trained with 2000 sessions
+│   ├── 2500sess.pkl     # Model trained with 2500 sessions
+│   ├── 3000sess.pkl     # Model trained with 3000 sessions
+│   ├── 3500sess.pkl     # Model trained with 3500 sessions
+│   ├── 4000sess.pkl     # Model trained with 4000 sessions
+│   ├── 4500sess.pkl     # Model trained with 4500 sessions
+│   └── 5000sess.pkl     # Model trained with 5000 sessions
+├── assets/               # Graphical resources (sprites)
+├── fonts/                # Font files
+└── README.md            # This file
 ```
 
 ---
 
-## ▌Résultats de Performance
+## ▌Performance Results
 
-### ■ Statistiques d'Entraînement Réelles
+### ■ Real Training Statistics
 
-Les statistiques suivantes proviennent de l'entraînement réel du modèle :
+The following statistics come from the actual model training:
 
-| Sessions | Longueur Max | Récompense Totale | Étapes | Epsilon | États Appris | Bonus Atteints |
-|----------|--------------|-------------------|--------|---------|--------------|----------------|
+| Sessions | Max Length | Total Reward | Steps | Epsilon | Learned States | Bonuses Achieved |
+|----------|------------|--------------|-------|---------|----------------|------------------|
 | 1 | 3 | -109.00 | 10 | 0.0999 | 5 | - |
 | 10 | 3 | -102.00 | 3 | 0.0990 | 14 | - |
 | 100 | 4 | -103.00 | 4 | 0.0905 | 39 | - |
@@ -326,35 +326,35 @@ Les statistiques suivantes proviennent de l'entraînement réel du modèle :
 | 4500 | 71 | -277.00 | 409 | 0.0100 | 269 | [10, 15, 20, 25, 30, 35] |
 | 5000 | 65 | -556.00 | 468 | 0.0100 | 270 | [10, 15, 20, 25, 30, 35] |
 
-### ■ Analyse des Performances
+### ■ Performance Analysis
 
-- **Progression** : Le modèle atteint une longueur maximale de **71 cellules** après 4500 sessions
-- **Taux de réussite** : Le modèle développe des stratégies efficaces pour éviter les collisions
-- **Exploration** : L'epsilon décroît progressivement de 0.1 à 0.01, favorisant l'exploitation
-- **États appris** : Le modèle découvre environ **270 états uniques** après 5000 sessions
-- **Bonus** : Le modèle atteint régulièrement les longueurs de bonus (10, 15, 20, 25, 30, 35)
+- **Progression**: The model reaches a maximum length of **71 cells** after 4500 sessions
+- **Success rate**: The model develops effective strategies to avoid collisions
+- **Exploration**: Epsilon gradually decreases from 0.1 to 0.01, favoring exploitation
+- **Learned states**: The model discovers approximately **270 unique states** after 5000 sessions
+- **Bonuses**: The model regularly achieves bonus lengths (10, 15, 20, 25, 30, 35)
 
 ---
 
-## ▌Détails Techniques
+## ▌Technical Details
 
 ### Architecture
-Le projet suit une architecture modulaire :
-- **`game_data.py`** : Gère l'état du jeu, les mouvements du serpent, le placement des pommes
-- **`agent.py`** : Implémente l'algorithme Q-learning et la prise de décision
-- **`game_gui.py`** : Gère l'affichage visuel et l'interaction utilisateur
-- **`snake.py`** : Orchestre l'entraînement et l'évaluation
+The project follows a modular architecture:
+- **`game_data.py`**: Manages game state, snake movements, apple placement
+- **`agent.py`**: Implements Q-learning algorithm and decision making
+- **`game_gui.py`**: Handles visual display and user interaction
+- **`snake.py`**: Orchestrates training and evaluation
 
-### Qualité du Code
-- Respect des standards Python PEP 8
-- Design modulaire avec séparation claire des responsabilités
-- Gestion d'erreurs complète
-- Documentation extensive avec docstrings
-- Validation des arguments en ligne de commande
+### Code Quality
+- Follows Python PEP 8 standards
+- Modular design with clear separation of concerns
+- Comprehensive error handling
+- Extensive documentation with docstrings
+- Command-line argument validation
 
-### Outils de Développement
+### Development Tools
 
-Pour vérifier et formater le code :
+To check and format the code:
 
 ```bash
 flake8 snake.py
