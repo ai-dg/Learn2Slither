@@ -1,5 +1,5 @@
 # Learn2Slither 🐍
-
+![Score](https://img.shields.io/badge/Score-125%25-brightgreen)  
 **A snake that learns how to behave in an environment through trial and error using Q-learning reinforcement learning**
 
 > Train an AI agent to play Snake using Q-learning algorithm with limited vision and proper reward system.
@@ -13,6 +13,16 @@ The snake learns through trial and error, gradually improving its performance ov
 It serves as an introduction to **reinforcement learning fundamentals**, written from scratch without using high-level ML libraries.
 
 📘 Educational AI project: **you'll build and train your own Q-learning model step-by-step**.
+
+![Screencast From 2025-12-05 11-34-58]()
+
+<div align="center">
+
+| Snake in action |
+|:---:|
+| <img src="https://github.com/user-attachments/assets/437c5b6b-0a8c-4bdf-97e9-18bbfa76264f" alt="Snake in action" width="500"> |
+
+</div>
 
 ---
 
