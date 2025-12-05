@@ -14,8 +14,6 @@ It serves as an introduction to **reinforcement learning fundamentals**, written
 
 📘 Educational AI project: **you'll build and train your own Q-learning model step-by-step**.
 
-![Screencast From 2025-12-05 11-34-58]()
-
 <div align="center">
 
 | Snake in action |
