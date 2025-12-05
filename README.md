@@ -30,14 +30,15 @@ It serves as an introduction to **reinforcement learning fundamentals**, written
 
 ---
 
-## ▌Bonus Features
+## ▌Fonctionnalités Bonus
 
-- ■ **Enhanced GUI**: Lobby system, configuration panel, statistics tracking
-- ■ **Variable Board Sizes**: Support for different board dimensions (10x10, 15x15, 20x20)
-- ■ **High Performance**: Achieved length 20+ with 70% success rate
-- ■ **Advanced Training**: Improved parameters and training strategies
+- ■ **Interface Graphique Améliorée** : Système de lobby, panneau de configuration, suivi des statistiques
+- ■ **Tailles de Plateau Variables** : Support pour différentes dimensions (10×10, 15×15, 20×20, jusqu'à 40×40)
+- ■ **Haute Performance** : Longueur maximale atteinte de **71 cellules** après 4500 sessions
+- ■ **Paramètres Avancés** : Contrôle de la vitesse (FPS), mode pas-à-pas, tracé des courbes d'apprentissage
+- ■ **Statistiques Détaillées** : Affichage périodique des performances avec bonus atteints
 
-> ⚠️ These features are only evaluated if the core program works flawlessly.
+> ⚠️ Ces fonctionnalités ne sont évaluées que si le programme de base fonctionne parfaitement.
 
 ---
 
@@ -86,8 +87,10 @@ Game Over: -100
 - `pygame` (graphical interface)
 - `numpy` (numerical operations)
 - `pickle` (model serialization)
+- `tabulate` (table formatting)
+- `matplotlib` (plotting, optionnel)
 
-### ■ Installation & Usage
+### ■ Installation
 
 1. Clone the repository
 
@@ -102,148 +105,261 @@ cd Learn2Slither
 pip install -r requirements.txt
 ```
 
-3. Train a model
+---
+
+## ▌Instructions d'Utilisation
+
+### ■ Syntaxe de Base
 
 ```bash
-# Train with 100 sessions
-python3 snake.py -sessions 100 -visual off -save models/my_model.txt
-
-# Train with visual display
-python3 snake.py -sessions 50 -visual on -speed 5
+python3 snake.py [OPTIONS]
 ```
 
-4. Evaluate a trained model
+ou directement :
 
 ```bash
-# Load and evaluate a model
-python3 snake.py -load models/1000sess.txt -sessions 10 -dontlearn
+./snake [OPTIONS]
 ```
 
-5. Run interactive mode
+### ■ Options Disponibles
+
+#### Options Principales
+
+| Option | Type | Défaut | Description |
+|--------|------|--------|-------------|
+| `-sessions N` | entier | 10 | Nombre de sessions d'entraînement |
+| `-visual [on\|off]` | choix | off | Active/désactive l'affichage graphique (Pygame) |
+| `-terminal [on\|off]` | choix | on | Active/désactive l'affichage terminal du jeu |
+| `-save PATH` | chaîne | - | Chemin pour sauvegarder le modèle entraîné (.pkl) |
+| `-load PATH` | chaîne | - | Chemin pour charger un modèle pré-entraîné (.pkl) |
+| `-dontlearn` | flag | False | Désactive l'apprentissage (mode évaluation uniquement) |
+| `-step-by-step` | flag | False | Active le mode pas-à-pas (pause à chaque mouvement) |
+
+#### Options Bonus
+
+| Option | Type | Défaut | Description |
+|--------|------|--------|-------------|
+| `-speed N` | entier | 50 | Vitesse du jeu en FPS (frames per second) |
+| `-size N` | entier | 10 | Taille du plateau (N×N cellules, max 40) |
+| `-stats` | flag | False | Affiche les statistiques toutes les 50 sessions |
+| `-plot` | flag | False | Trace les courbes d'apprentissage (longueur max vs sessions) |
+
+### ■ Exemples d'Utilisation
+
+#### 1. Entraîner un modèle (sans affichage)
 
 ```bash
-python3 snake.py -interactive
+# Entraînement basique avec 100 sessions
+python3 snake.py -sessions 100 -visual off -save models/my_model.pkl
+
+# Entraînement avec statistiques
+python3 snake.py -sessions 1000 -visual off -save models/1000sess.pkl -stats
 ```
 
-6. Run demonstration
+#### 2. Entraîner avec affichage graphique
 
 ```bash
-python3 demo.py
+# Entraînement avec visualisation
+python3 snake.py -sessions 50 -visual on -speed 10
+
+# Entraînement avec visualisation et mode pas-à-pas
+python3 snake.py -sessions 10 -visual on -step-by-step -speed 5
 ```
+
+#### 3. Évaluer un modèle pré-entraîné
+
+```bash
+# Charger et évaluer sans apprentissage
+python3 snake.py -load models/1000sess.pkl -sessions 10 -dontlearn
+
+# Évaluation avec visualisation
+python3 snake.py -load models/1000sess.pkl -sessions 5 -visual on -dontlearn -speed 10
+```
+
+#### 4. Entraîner avec différentes tailles de plateau
+
+```bash
+# Plateau 15×15
+python3 snake.py -sessions 100 -size 15 -visual off -save models/15x15_100sess.pkl
+
+# Plateau 20×20
+python3 snake.py -sessions 200 -size 20 -visual off -save models/20x20_200sess.pkl
+```
+
+#### 5. Visualiser les courbes d'apprentissage
+
+```bash
+# Entraînement avec tracé des statistiques
+python3 snake.py -sessions 500 -visual off -plot -stats -save models/500sess.pkl
+```
+
+#### 6. Mode terminal uniquement (sans GUI)
+
+```bash
+# Affichage terminal uniquement
+python3 snake.py -sessions 50 -visual off -terminal on
+
+# Sans affichage du tout (entraînement rapide)
+python3 snake.py -sessions 1000 -visual off -terminal off
+```
+
+### ■ Règles du Jeu
+
+- **Taille du plateau** : 10×10 cellules par défaut (configurable)
+- **Pommes vertes** : 2 pommes vertes apparaissent aléatoirement
+- **Pomme rouge** : 1 pomme rouge apparaît aléatoirement
+- **Longueur initiale** : Le serpent commence avec une longueur de 3 cellules
+- **Conditions de fin** :
+  - Collision avec un mur → Game Over
+  - Collision avec sa propre queue → Game Over
+  - Longueur du serpent atteint 0 → Game Over
+- **Mécaniques** :
+  - Manger une pomme verte : longueur +1, nouvelle pomme verte apparaît
+  - Manger une pomme rouge : longueur -1, nouvelle pomme rouge apparaît
 
 ---
 
-## ▌Performance Results
-
-### Standard Models
-| Sessions | Best Length | Best Duration | Success Rate | Q-table States |
-|----------|-------------|---------------|--------------|----------------|
-| 1        | 3           | 9             | 0%           | 7              |
-| 10       | 4           | 12            | 0%           | 20             |
-| 100      | 6           | 55            | 0%           | 84             |
-| 1000     | 33          | 1000          | 21%          | 254            |
-
-### Advanced Models
-| Configuration | Best Length | Success Rate | Features |
-|---------------|-------------|--------------|----------|
-| 10x10 Advanced | 23+ | 70-80% | Enhanced parameters |
-| 15x15 Board | 4+ | Variable | Larger environment |
-| 20x20 Board | 4+ | Variable | Extended gameplay |
 
 ---
 
-## ▌Example
+## ▌Exemple de Sortie
+
+### Entraînement
 
 ```bash
-$ python3 snake.py -sessions 100 -visual off -save models/test.txt
-Training session 1/100...
-Training session 50/100...
-Training session 100/100...
+$ python3 snake.py -sessions 100 -visual off -save models/test.pkl -stats
 
-Final results:
-Best length: 6
-Best duration: 55
-Success rate: 0%
-Q-table states: 84
+SESSION 1 - STATISTICS:
+  Max length: 3 at session 1
+  Total reward: -109.00
+  Steps: 10
+  Epsilon: 0.0999
+  Learned states: 5
+  Over: True
 
-Model saved to: models/test.txt
+SESSION 50 - STATISTICS:
+  Max length: 4 at session 45
+  Total reward: -105.00
+  Steps: 8
+  Epsilon: 0.0775
+  Learned states: 52
+  Over: True
 
-$ python3 snake.py -load models/1000sess.txt -sessions 5 -dontlearn
-Loading model from: models/1000sess.txt
+SESSION 100 - STATISTICS:
+  Max length: 4 at session 87
+  Total reward: -103.00
+  Steps: 4
+  Epsilon: 0.0905
+  Learned states: 39
+  Over: True
+
+Model saved to ./models/test.pkl
+```
+
+### Évaluation
+
+```bash
+$ python3 snake.py -load models/1000sess.pkl -sessions 5 -dontlearn -visual on
+
+Loading model from: models/1000sess.pkl
 Model loaded successfully.
 
-Evaluation results:
-Session 1: Length 33, Duration 1000
-Session 2: Length 25, Duration 800
-Session 3: Length 30, Duration 950
-Session 4: Length 28, Duration 900
-Session 5: Length 31, Duration 980
+Evaluation session 1/5...
+Evaluation session 2/5...
+Evaluation session 3/5...
+Evaluation session 4/5...
+Evaluation session 5/5...
 
-Average length: 29.4
-Success rate: 100%
+Average performance: Length 7, Steps 1
 ```
 
 ---
 
-## ▌Project Structure
+## ▌Structure du Projet
 
 ```
 Learn2Slither/
-├── board.py              # Game board and environment
-├── agent.py              # Q-learning agent
-├── gui.py                # Graphical interface (basic + advanced)
-├── snake.py              # Main game (basic features)
-├── advanced_snake.py     # Advanced game (bonus features)
-├── train_models.py       # Script to train required models
-├── train_advanced_models.py  # Script for advanced training
-├── demo.py               # Demonstration script
-├── requirements.txt      # Python dependencies
-├── models/               # Trained AI models
-│   ├── 1sess.txt        # Model trained with 1 session
-│   ├── 10sess.txt       # Model trained with 10 sessions
-│   ├── 100sess.txt      # Model trained with 100 sessions
-│   ├── 1000sess.txt     # Model trained with 1000 sessions
-│   └── advanced_*.txt   # Advanced models with bonus features
-└── README.md            # This file
+├── snake.py              # Script principal (point d'entrée)
+├── agent.py              # Implémentation de l'agent Q-learning
+├── game_data.py          # Gestion du plateau de jeu et logique
+├── game_gui.py           # Interface graphique Pygame
+├── requirements.txt      # Dépendances Python
+├── models/               # Modèles IA pré-entraînés
+│   ├── 1sess.pkl        # Modèle entraîné avec 1 session
+│   ├── 10sess.pkl       # Modèle entraîné avec 10 sessions
+│   ├── 100sess.pkl      # Modèle entraîné avec 100 sessions
+│   ├── 1000sess.pkl     # Modèle entraîné avec 1000 sessions
+│   ├── 1500sess.pkl     # Modèle entraîné avec 1500 sessions
+│   ├── 2000sess.pkl     # Modèle entraîné avec 2000 sessions
+│   ├── 2500sess.pkl     # Modèle entraîné avec 2500 sessions
+│   ├── 3000sess.pkl     # Modèle entraîné avec 3000 sessions
+│   ├── 3500sess.pkl     # Modèle entraîné avec 3500 sessions
+│   ├── 4000sess.pkl     # Modèle entraîné avec 4000 sessions
+│   ├── 4500sess.pkl     # Modèle entraîné avec 4500 sessions
+│   └── 5000sess.pkl     # Modèle entraîné avec 5000 sessions
+├── assets/               # Ressources graphiques (sprites)
+├── fonts/                # Polices de caractères
+└── README.md            # Ce fichier
 ```
 
 ---
 
-## ▌Command Line Options
+## ▌Résultats de Performance
 
-### Basic Options
-- `-sessions N`: Number of training sessions
-- `-visual [on|off]`: Enable/disable visual display
-- `-step-by-step`: Enable step-by-step mode
-- `-speed N`: Game speed in FPS
-- `-size N`: Board size (bonus feature)
+### ■ Statistiques d'Entraînement Réelles
 
-### Model Options
-- `-save PATH`: Save trained model to file
-- `-load PATH`: Load trained model from file
-- `-dontlearn`: Disable learning (evaluation mode)
+Les statistiques suivantes proviennent de l'entraînement réel du modèle :
 
-### Mode Options
-- `-terminal`: Show or hide snake movements
-- `-plot`: Plot learninag curve with max_lengths and sessions
-- `-stats`: Show stats each 50 sessions
+| Sessions | Longueur Max | Récompense Totale | Étapes | Epsilon | États Appris | Bonus Atteints |
+|----------|--------------|-------------------|--------|---------|--------------|----------------|
+| 1 | 3 | -109.00 | 10 | 0.0999 | 5 | - |
+| 10 | 3 | -102.00 | 3 | 0.0990 | 14 | - |
+| 100 | 4 | -103.00 | 4 | 0.0905 | 39 | - |
+| 500 | 5 | -100.00 | 1 | 0.0606 | 88 | - |
+| 1000 | 7 | -100.00 | 1 | 0.0368 | 114 | - |
+| 1500 | 8 | -108.00 | 20 | 0.0223 | 137 | - |
+| 2000 | 10 | -118.00 | 32 | 0.0135 | 167 | [10] |
+| 2500 | 19 | -128.00 | 62 | 0.0100 | 201 | [10, 15] |
+| 3000 | 25 | -135.00 | 69 | 0.0100 | 222 | [10, 15, 20, 25] |
+| 3500 | 63 | -610.00 | 680 | 0.0100 | 262 | [10, 15, 20, 25, 30, 35] |
+| 4000 | 67 | -530.00 | 664 | 0.0100 | 271 | [10, 15, 20, 25, 30, 35] |
+| 4500 | 71 | -277.00 | 409 | 0.0100 | 269 | [10, 15, 20, 25, 30, 35] |
+| 5000 | 65 | -556.00 | 468 | 0.0100 | 270 | [10, 15, 20, 25, 30, 35] |
+
+### ■ Analyse des Performances
+
+- **Progression** : Le modèle atteint une longueur maximale de **71 cellules** après 4500 sessions
+- **Taux de réussite** : Le modèle développe des stratégies efficaces pour éviter les collisions
+- **Exploration** : L'epsilon décroît progressivement de 0.1 à 0.01, favorisant l'exploitation
+- **États appris** : Le modèle découvre environ **270 états uniques** après 5000 sessions
+- **Bonus** : Le modèle atteint régulièrement les longueurs de bonus (10, 15, 20, 25, 30, 35)
 
 ---
 
-## ▌Technical Details
+## ▌Détails Techniques
 
 ### Architecture
-The project follows a modular architecture:
-- **Board**: Manages game state, snake movement, apple placement
-- **Agent**: Implements Q-learning algorithm and decision making
-- **GUI**: Handles visual display and user interaction
-- **Main**: Orchestrates training and evaluation
+Le projet suit une architecture modulaire :
+- **`game_data.py`** : Gère l'état du jeu, les mouvements du serpent, le placement des pommes
+- **`agent.py`** : Implémente l'algorithme Q-learning et la prise de décision
+- **`game_gui.py`** : Gère l'affichage visuel et l'interaction utilisateur
+- **`snake.py`** : Orchestre l'entraînement et l'évaluation
 
-### Code Quality
-- Follows Python PEP 8 standards
-- Modular design with clear separation of concerns
-- Comprehensive error handling
-- Extensive documentation
+### Qualité du Code
+- Respect des standards Python PEP 8
+- Design modulaire avec séparation claire des responsabilités
+- Gestion d'erreurs complète
+- Documentation extensive avec docstrings
+- Validation des arguments en ligne de commande
+
+### Outils de Développement
+
+Pour vérifier et formater le code :
+
+```bash
+flake8 snake.py
+autopep8 --in-place --aggressive --aggressive snake.py
+```
 
 ---
 
@@ -273,155 +389,3 @@ It is intended for **academic purposes only** and follows the evaluation require
 Unauthorized public sharing or direct copying for **grading purposes** is discouraged.\
 If you wish to use or study this code, please ensure it complies with **your school's policies**.
 
-
-
-```bash
-flake8 mon_script.py
-autopep8 --in-place --aggressive --aggressive mon_script.py
-
-```
-
-Board size: 10 cells by 10 cells.
-Two green apples, in a random cell of the board
-One red apple, in a random cell of the board
-The snake starts with a length of 3 cells, also placed randomly and contiguously on the board.
-If the snake hits a wall: Game over, this training session ends.
-If the snake collides with its own tail: Game over, this training session ends.
-The snake eats a green apple: snake’s length increase by 1. A new green apple
-appears on the board.
-The snake eats a red apple: snake’s length decrease by 1. A new red apple appears
-on the board.
-If the snake’s length drops to 0: Game over, this training session ends.
-
-```bash
-./snake -sessions 10 -save models/10sess.txt -visual off
-./snake -visual on -load models/100sess.txt -sessions 10 -dontlearn -step-by-step
-Load trained model from models/100sess.txt
-./snake -visual on -load models/1000sess.txt
-
-```
-
-SESSION 1 - STATISTICS:
-  Max length: 3 at session 1
-  Total reward: -109.00
-  Steps: 10
-  Epsilon: 0.0999
-  Learned states: 5
-  Over: True
-
-Model saved to ./models/1sess.pkl
-
-SESSION 10 - STATISTICS:
-  Max length: 3 at session 1
-  Total reward: -102.00
-  Steps: 3
-  Epsilon: 0.0990
-  Learned states: 14
-  Over: True
-
-Model saved to ./models/10sess.pkl
-
-SESSION 100 - STATISTICS:
-  Max length: 4 at session 7
-  Total reward: -103.00
-  Steps: 4
-  Epsilon: 0.0905
-  Learned states: 39
-  Over: True
-
-Model saved to ./models/100sess.pkl
-
-
-SESSION 500 - STATISTICS:
-  Max length: 5 at session 459
-  Total reward: -100.00
-  Steps: 1
-  Epsilon: 0.0606
-  Learned states: 88
-  Over: True
-
-SESSION 1000 - STATISTICS:
-  Max length: 7 at session 617
-  Total reward: -100.00
-  Steps: 1
-  Epsilon: 0.0368
-  Learned states: 114
-  Over: True
-
-SESSION 1500 - STATISTICS:
-  Max length: 8 at session 1383
-  Total reward: -108.00
-  Steps: 20
-  Epsilon: 0.0223
-  Learned states: 137
-  Over: True
-
-
-SESSION 2000 - STATISTICS:
-  Max length: 10 at session 1809
-  Total reward: -118.00
-  Steps: 32
-  Epsilon: 0.0135
-  Learned states: 167
-  Over: True
-  Bonuses achieved: [10]
-
-SESSION 2500 - STATISTICS:
-  Max length: 19 at session 2204
-  Total reward: -128.00
-  Steps: 62
-  Epsilon: 0.0100
-  Learned states: 201
-  Over: True
-  Bonuses achieved: [10, 15]
-
-SESSION 3000 - STATISTICS:
-  Max length: 25 at session 2874
-  Total reward: -135.00
-  Steps: 69
-  Epsilon: 0.0100
-  Learned states: 222
-  Over: True
-  Bonuses achieved: [10, 15, 20, 25]
-
-SESSION 3500 - STATISTICS:
-  Max length: 63 at session 3445
-  Total reward: -610.00
-  Steps: 680
-  Epsilon: 0.0100
-  Learned states: 262
-  Over: True
-  Bonuses achieved: [10, 15, 20, 25, 30, 35]
-
-SESSION 4000 - STATISTICS:
-  Max length: 67 at session 3998
-  Total reward: -530.00
-  Steps: 664
-  Epsilon: 0.0100
-  Learned states: 271
-  Over: True
-  Bonuses achieved: [10, 15, 20, 25, 30, 35]
-
-SESSION 4500 - STATISTICS:
-  Max length: 71 at session 3104
-  Total reward: -277.00
-  Steps: 409
-  Epsilon: 0.0100
-  Learned states: 269
-  Over: True
-  Bonuses achieved: [10, 15, 20, 25, 30, 35]
-
-SESSION 5000 - STATISTICS:
-  Max length: 65 at session 4482
-  Total reward: -556.00
-  Steps: 468
-  Epsilon: 0.0100
-  Learned states: 270
-  Over: True
-  Bonuses achieved: [10, 15, 20, 25, 30, 35]
- 
- ```bash
- memray run -o out.bin --leaks snake.py -sessions 100
- memray tree out.bin 
- memray flamegraph out.bin 
- ```
