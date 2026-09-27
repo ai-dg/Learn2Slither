@@ -69,10 +69,10 @@ The agent receives a 4-character string representing what it sees in each direct
 ### ■ Q-Learning Parameters
 
 ```text
-Learning Rate: 0.1
-Discount Factor: 0.9 (basic) / 0.95 (advanced)
+Learning Rate: 0.01
+Discount Factor: 0.9
 Epsilon: 0.1 (exploration rate)
-Epsilon Decay: 0.995
+Epsilon Decay: 0.999 (per session)
 Epsilon Min: 0.01
 ```
 
@@ -94,9 +94,9 @@ Game Over: -100
 - Python 3.x
 - `pygame` (graphical interface)
 - `numpy` (numerical operations)
-- `pickle` (model serialization)
 - `tabulate` (table formatting)
-- `matplotlib` (plotting, optional)
+- `colorama` (terminal colors)
+- `matplotlib` (plotting)
 
 ### ■ Installation
 
@@ -237,48 +237,35 @@ python3 snake.py -sessions 1000 -visual off -terminal off
 ```bash
 $ python3 snake.py -sessions 100 -visual off -save models/test.pkl -stats
 
-SESSION 1 - STATISTICS:
-  Max length: 3 at session 1
-  Total reward: -109.00
-  Steps: 10
-  Epsilon: 0.0999
-  Learned states: 5
-  Over: True
-
 SESSION 50 - STATISTICS:
-  Max length: 4 at session 45
-  Total reward: -105.00
-  Steps: 8
-  Epsilon: 0.0775
-  Learned states: 52
+  Max length: '4' at session '18'
+  Total reward: -100.00
+  Steps: 1
+  Epsilon: 0.0951
+  Learned states: 27
   Over: True
 
 SESSION 100 - STATISTICS:
-  Max length: 4 at session 87
-  Total reward: -103.00
-  Steps: 4
+  Max length: '4' at session '18'
+  Total reward: -104.00
+  Steps: 5
   Epsilon: 0.0905
-  Learned states: 39
+  Learned states: 40
   Over: True
 
-Model saved to ./models/test.pkl
+Model saved to models/test.pkl
 ```
+
+Values vary between runs; this is one run of `-sessions 100`.
 
 ### Evaluation
 
 ```bash
 $ python3 snake.py -load models/1000sess.pkl -sessions 5 -dontlearn -visual on
 
-Loading model from: models/1000sess.pkl
-Model loaded successfully.
-
-Evaluation session 1/5...
-Evaluation session 2/5...
-Evaluation session 3/5...
-Evaluation session 4/5...
-Evaluation session 5/5...
-
-Average performance: Length 7, Steps 1
+Model loaded from models/1000sess.pkl
+Episodes trained: 1000
+States in Q-table: 119
 ```
 
 ---
@@ -296,6 +283,7 @@ Learn2Slither/
 │   ├── 1sess.pkl        # Model trained with 1 session
 │   ├── 10sess.pkl       # Model trained with 10 sessions
 │   ├── 100sess.pkl      # Model trained with 100 sessions
+│   ├── 500sess.pkl      # Model trained with 500 sessions
 │   ├── 1000sess.pkl     # Model trained with 1000 sessions
 │   ├── 1500sess.pkl     # Model trained with 1500 sessions
 │   ├── 2000sess.pkl     # Model trained with 2000 sessions
