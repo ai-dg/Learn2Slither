@@ -121,7 +121,7 @@ def ft_parsing_arguments() -> argparse.Namespace:
 
     # Mandatory part
     parser = argparse.ArgumentParser(
-        description="Learn2Slither - IA Q function with Neural Networks")
+        description="Learn2Slither - tabular Q-learning agent")
     parser.add_argument('-sessions', type=int, default=10,
                         help='how many training sessions?')
     parser.add_argument('-visual', choices=['on', 'off'], default='off',

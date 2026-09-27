@@ -11,10 +11,10 @@ fi
 
 COMPONENTS=(
     numpy
-    tensorflow
     pygame
-    keras
     tabulate
+    matplotlib
+    colorama
 )
 
 FILE="./nbr_pkg.txt"
